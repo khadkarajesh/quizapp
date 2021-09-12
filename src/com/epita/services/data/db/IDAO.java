@@ -1,4 +1,4 @@
-package com.epita.services.data;
+package com.epita.services.data.db;
 
 import com.epita.models.Question;
 

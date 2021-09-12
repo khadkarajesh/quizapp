@@ -1,8 +1,8 @@
 package com.epita;
 
 import com.epita.models.Question;
-import com.epita.services.data.DatabaseManager;
-import com.epita.services.data.QuestionDAO;
+import com.epita.services.data.db.DatabaseManager;
+import com.epita.services.data.db.QuestionDAO;
 
 import java.sql.SQLException;
 

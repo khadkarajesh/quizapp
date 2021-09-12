@@ -1,6 +1,7 @@
-package com.epita.services.data;
+package com.epita.services.data.db;
 
 import com.epita.models.Question;
+import com.epita.services.base.BaseDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
