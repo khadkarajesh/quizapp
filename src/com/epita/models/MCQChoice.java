@@ -1,6 +1,9 @@
 package com.epita.models;
 
 public class MCQChoice {
+    private String choice;
+    private boolean valid;
+
     public String getChoice() {
         return choice;
     }
@@ -16,7 +19,4 @@ public class MCQChoice {
     public void setValid(boolean valid) {
         this.valid = valid;
     }
-
-    private String choice;
-    private boolean valid;
 }

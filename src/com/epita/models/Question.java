@@ -1,11 +1,24 @@
 package com.epita.models;
 
+import java.util.Arrays;
+
 public class Question {
     public static final int DEFAULT_DIFFICULTY = 2;
 
     private Integer id;
     //Defaults to 2
     private Integer difficulty = DEFAULT_DIFFICULTY;
+    private String[] topics;
+    private int quizId;
+
+    public String[] getTopics() {
+        return topics;
+    }
+
+    public void setTopics(String[] topics) {
+        this.topics = topics;
+    }
+
     private String question;
 
 
@@ -33,11 +46,25 @@ public class Question {
         this.id = id;
     }
 
+    public int getQuizId() {
+        return quizId;
+    }
+
+    public void setQuizId(int quizId) {
+        this.quizId = quizId;
+    }
+
+    public String mapToStr() {
+        return String.join(",", this.topics);
+    }
+
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
                 ", difficulty=" + difficulty +
+                ", topics=" + Arrays.toString(topics) +
+                ", quizId=" + quizId +
                 ", question='" + question + '\'' +
                 '}';
     }

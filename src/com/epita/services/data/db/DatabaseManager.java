@@ -21,14 +21,17 @@ public enum DatabaseManager {
             + ")";
 
     public static final class Table {
-        public static final String QUESTIONS = "QUESTIONS";
-        public static final String STUDENTS = "STUDENTS";
+        public static final String QUESTION = "QUESTION";
+        public static final String STUDENT = "STUDENT";
+        public static final String QUIZ = "QUIZ";
     }
 
     public static final class QuestionColumns {
         public static final String ID = "id";
         public static final String TITLE = "title";
         public static final String DIFFICULTY = "difficulty";
+        public static final String QUIZ_ID = "quiz_id";
+        public static final String TOPICS = "topics";
     }
 
 
@@ -37,20 +40,35 @@ public enum DatabaseManager {
         public static final String NAME = "name";
     }
 
+    public static final class QuizColumns {
+        public static final String ID = "id";
+        public static final String TITLE = "title";
+    }
+
     private static final String QUESTION_TABLE_CREATION_SQL =
             "CREATE TABLE IF NOT EXISTS "
-                    + Table.QUESTIONS
+                    + Table.QUESTION
                     + "("
                     + QuestionColumns.ID + " int auto_increment primary key,"
                     + QuestionColumns.TITLE + " VARCHAR(255),"
-                    + QuestionColumns.DIFFICULTY + " INT" +
-                    ")";
+                    + QuestionColumns.DIFFICULTY + " INT,"
+                    + QuestionColumns.QUIZ_ID + " INT,"
+                    + QuestionColumns.TOPICS + " VARCHAR(255),"
+                    + "foreign key (" + QuestionColumns.QUIZ_ID + ") references " + Table.QUIZ + "(" + QuizColumns.ID + ")"
+                    + ")";
 
     private static final String STUDENT_TABLE_CREATION_SQL = "CREATE TABLE IF NOT EXISTS " +
-            Table.STUDENTS
+            Table.STUDENT
             + "(" + StudentColumns.ID + " int auto_increment primary key,"
             + StudentColumns.NAME + " varchar(255) "
             + ")";
+
+    private static final String QUIZ_TABLE_CREATION_SQL = "CREATE TABLE IF NOT EXISTS " + Table.QUIZ
+            + "(" + StudentColumns.ID + " int auto_increment primary key,"
+            + QuizColumns.TITLE + " varchar(255) "
+            + ")";
+
+//    private static final String MCQ_CHOICE_CREATION_SQL = "";
 
     DatabaseManager() {
         Configuration conf = Configuration.INSTANCE;
@@ -71,7 +89,10 @@ public enum DatabaseManager {
 
     public void createTables() throws SQLException {
         try {
-            for (String table : Arrays.asList(QUESTION_TABLE_CREATION_SQL, STUDENT_TABLE_CREATION_SQL)) {
+            for (String table : Arrays.asList(
+                    QUIZ_TABLE_CREATION_SQL,
+                    QUESTION_TABLE_CREATION_SQL,
+                    STUDENT_TABLE_CREATION_SQL)) {
                 PreparedStatement preparedStatement = connection.prepareStatement(table);
                 preparedStatement.execute();
                 System.out.println("created table successfully");
@@ -83,5 +104,9 @@ public enum DatabaseManager {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public PreparedStatement prepare(String sql) throws SQLException {
+        return connection.prepareStatement(sql);
     }
 }
