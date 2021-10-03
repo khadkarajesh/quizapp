@@ -1,4 +1,0 @@
-hello world
-this is me
-i am going to
-talk about java
