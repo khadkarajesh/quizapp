@@ -15,8 +15,13 @@ public class QuizDAO extends BaseDAO implements IDAO<Quiz> {
     }
 
     @Override
-    public Quiz findById(int id) {
-        return null;
+    public Quiz findById(int id) throws SQLException {
+        String selectSql = "select * from " + DatabaseManager.Table.QUIZ + " where id=?";
+        PreparedStatement statement = manager.prepare(selectSql);
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
+        return toModel(resultSet);
     }
 
     @Override
@@ -75,7 +80,10 @@ public class QuizDAO extends BaseDAO implements IDAO<Quiz> {
     }
 
     @Override
-    public Quiz toModel(ResultSet resultSet) {
-        return null;
+    public Quiz toModel(ResultSet resultSet) throws SQLException {
+        Quiz quiz = new Quiz();
+        quiz.setId(resultSet.getInt(DatabaseManager.QuizColumns.ID));
+        quiz.setTitle(resultSet.getString(DatabaseManager.QuizColumns.TITLE));
+        return quiz;
     }
 }

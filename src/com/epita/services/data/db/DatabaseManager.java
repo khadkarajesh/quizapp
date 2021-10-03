@@ -24,6 +24,7 @@ public enum DatabaseManager {
         public static final String QUESTION = "QUESTION";
         public static final String STUDENT = "STUDENT";
         public static final String QUIZ = "QUIZ";
+        public static final String CHOICE = "CHOICE";
     }
 
     public static final class QuestionColumns {
@@ -43,6 +44,13 @@ public enum DatabaseManager {
     public static final class QuizColumns {
         public static final String ID = "id";
         public static final String TITLE = "title";
+    }
+
+    public static final class ChoiceColumns {
+        public static final String ID = "id";
+        public static final String CHOICE = "choice";
+        public static final String VALID = "valid";
+        public static final String QUESTION_ID = "question_id";
     }
 
     private static final String QUESTION_TABLE_CREATION_SQL =
@@ -68,7 +76,13 @@ public enum DatabaseManager {
             + QuizColumns.TITLE + " varchar(255) "
             + ")";
 
-//    private static final String MCQ_CHOICE_CREATION_SQL = "";
+    private static final String MCQ_CHOICE_CREATION_SQL = "CREATE TABLE IF NOT EXISTS " + Table.CHOICE
+            + "(" + ChoiceColumns.ID + " int auto_increment primary key,"
+            + ChoiceColumns.CHOICE + " varchar(255),"
+            + ChoiceColumns.VALID + " boolean default false,"
+            + ChoiceColumns.QUESTION_ID + " int not null,"
+            + " foreign key (" + ChoiceColumns.QUESTION_ID + ")" + " references " + Table.QUESTION + "(" + QuestionColumns.ID + ")"
+            + " )";
 
     DatabaseManager() {
         Configuration conf = Configuration.INSTANCE;
@@ -92,10 +106,11 @@ public enum DatabaseManager {
             for (String table : Arrays.asList(
                     QUIZ_TABLE_CREATION_SQL,
                     QUESTION_TABLE_CREATION_SQL,
-                    STUDENT_TABLE_CREATION_SQL)) {
+                    STUDENT_TABLE_CREATION_SQL,
+                    MCQ_CHOICE_CREATION_SQL)) {
                 PreparedStatement preparedStatement = connection.prepareStatement(table);
                 preparedStatement.execute();
-                System.out.println("created table successfully");
+//                System.out.println("created table successfully");
             }
         } catch (SQLException e) {
             System.out.println("e = " + e.getSQLState() + "message:" + e.getMessage());
