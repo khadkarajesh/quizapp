@@ -17,6 +17,7 @@ public enum DatabaseManager {
         public static final String STUDENT = "STUDENT";
         public static final String QUIZ = "QUIZ";
         public static final String CHOICE = "CHOICE";
+        public static final String RESULT = "RESULT";
     }
 
     public static final class QuestionColumns {
@@ -43,6 +44,14 @@ public enum DatabaseManager {
         public static final String CHOICE = "choice";
         public static final String VALID = "valid";
         public static final String QUESTION_ID = "question_id";
+    }
+
+    public static final class ResultColumns {
+        public static final String ID = "id";
+        public static final String STUDENT_ID = "student_id";
+        public static final String QUIZ_ID = "quiz_id";
+        public static final String QUESTION_ID = "question_id";
+        public static final String CHOICE_ID = "choice_id";
     }
 
     private static final String QUESTION_TABLE_CREATION_SQL =
@@ -76,6 +85,15 @@ public enum DatabaseManager {
             + " foreign key (" + ChoiceColumns.QUESTION_ID + ")" + " references " + Table.QUESTION + "(" + QuestionColumns.ID + ")" + " on delete cascade"
             + " )";
 
+    private static final String RESULT_CREATION_SQL = "CREATE TABLE IF NOT EXISTS " + Table.RESULT
+            + "(" + ResultColumns.ID + " int auto_increment primary key,"
+            + ResultColumns.STUDENT_ID + " int,"
+            + ResultColumns.QUIZ_ID + " int,"
+            + ResultColumns.QUESTION_ID + " int,"
+            + ResultColumns.CHOICE_ID + " int"
+            + ")";
+
+
     DatabaseManager() {
         Configuration conf = Configuration.INSTANCE;
         try {
@@ -99,7 +117,8 @@ public enum DatabaseManager {
                     QUIZ_TABLE_CREATION_SQL,
                     QUESTION_TABLE_CREATION_SQL,
                     STUDENT_TABLE_CREATION_SQL,
-                    MCQ_CHOICE_CREATION_SQL)) {
+                    MCQ_CHOICE_CREATION_SQL,
+                    RESULT_CREATION_SQL)) {
                 PreparedStatement preparedStatement = connection.prepareStatement(table);
                 preparedStatement.execute();
             }
