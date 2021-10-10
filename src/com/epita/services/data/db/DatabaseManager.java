@@ -11,14 +11,6 @@ import java.util.Arrays;
 public enum DatabaseManager {
     INSTANCE;
     private Connection connection;
-    private static final String SQL_CREATE = "CREATE TABLE EMPLOYEE"
-            + "("
-            + " ID serial,"
-            + " NAME varchar(100) NOT NULL,"
-            + " SALARY numeric(15, 2) NOT NULL,"
-            + " CREATED_DATE timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,"
-            + " PRIMARY KEY (ID)"
-            + ")";
 
     public static final class Table {
         public static final String QUESTION = "QUESTION";
@@ -79,9 +71,9 @@ public enum DatabaseManager {
     private static final String MCQ_CHOICE_CREATION_SQL = "CREATE TABLE IF NOT EXISTS " + Table.CHOICE
             + "(" + ChoiceColumns.ID + " int auto_increment primary key,"
             + ChoiceColumns.CHOICE + " varchar(255),"
-            + ChoiceColumns.VALID + " boolean default false,"
+            + ChoiceColumns.VALID + " boolean,"
             + ChoiceColumns.QUESTION_ID + " int not null,"
-            + " foreign key (" + ChoiceColumns.QUESTION_ID + ")" + " references " + Table.QUESTION + "(" + QuestionColumns.ID + ")"
+            + " foreign key (" + ChoiceColumns.QUESTION_ID + ")" + " references " + Table.QUESTION + "(" + QuestionColumns.ID + ")" + " on delete cascade"
             + " )";
 
     DatabaseManager() {
@@ -110,7 +102,6 @@ public enum DatabaseManager {
                     MCQ_CHOICE_CREATION_SQL)) {
                 PreparedStatement preparedStatement = connection.prepareStatement(table);
                 preparedStatement.execute();
-//                System.out.println("created table successfully");
             }
         } catch (SQLException e) {
             System.out.println("e = " + e.getSQLState() + "message:" + e.getMessage());

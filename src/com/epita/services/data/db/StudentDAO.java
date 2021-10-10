@@ -1,6 +1,5 @@
 package com.epita.services.data.db;
 
-import com.epita.models.Question;
 import com.epita.models.Student;
 import com.epita.services.base.BaseDAO;
 

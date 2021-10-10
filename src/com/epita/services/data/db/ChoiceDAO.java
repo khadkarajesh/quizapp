@@ -1,11 +1,13 @@
 package com.epita.services.data.db;
 
 import com.epita.models.MCQChoice;
+import com.epita.models.Question;
 import com.epita.services.base.BaseDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class ChoiceDAO extends BaseDAO implements IDAO<MCQChoice> {
@@ -25,8 +27,8 @@ public class ChoiceDAO extends BaseDAO implements IDAO<MCQChoice> {
 
     @Override
     public int create(MCQChoice mcqChoice) throws SQLException {
-        String sqlCreate = "insert into " + DatabaseManager.Table.CHOICE + "(choice, valid, question_id) values (?, ?, ?)";
-        PreparedStatement statement = manager.prepare(sqlCreate);
+        String sqlCreate = "INSERT INTO " + DatabaseManager.Table.CHOICE + "(CHOICE, VALID, QUESTION_ID) VALUES (?, ?, ?)";
+        PreparedStatement statement = manager.getConnection().prepareStatement(sqlCreate, Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, mcqChoice.getChoice());
         statement.setBoolean(2, mcqChoice.isValid());
         statement.setInt(3, mcqChoice.getQuestionId());
@@ -40,6 +42,7 @@ public class ChoiceDAO extends BaseDAO implements IDAO<MCQChoice> {
     public void update(MCQChoice mcqChoice) throws SQLException {
         String updateQuery = "update " + DatabaseManager.Table.CHOICE + " set choice=?, valid=? where " + DatabaseManager.ChoiceColumns.ID + "=?";
         PreparedStatement statement = manager.prepare(updateQuery);
+        System.out.println("statement to be printed = " + statement);
         statement.setString(1, mcqChoice.getChoice());
         statement.setBoolean(2, mcqChoice.isValid());
         statement.setInt(3, mcqChoice.getId());
@@ -81,6 +84,7 @@ public class ChoiceDAO extends BaseDAO implements IDAO<MCQChoice> {
     @Override
     public MCQChoice toModel(ResultSet resultSet) throws SQLException {
         MCQChoice mcqChoice = new MCQChoice();
+        mcqChoice.setValid(resultSet.getBoolean(DatabaseManager.ChoiceColumns.VALID));
         mcqChoice.setId(resultSet.getInt(DatabaseManager.ChoiceColumns.ID));
         mcqChoice.setChoice(resultSet.getString(DatabaseManager.ChoiceColumns.CHOICE));
         mcqChoice.setQuestionId(resultSet.getInt(DatabaseManager.ChoiceColumns.QUESTION_ID));

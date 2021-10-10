@@ -1,6 +1,8 @@
 package com.epita.models;
 
+import javax.sql.rowset.Joinable;
 import java.util.Arrays;
+import java.util.StringJoiner;
 
 public class Question {
     public static final int DEFAULT_DIFFICULTY = 2;
@@ -13,6 +15,14 @@ public class Question {
 
     public String[] getTopics() {
         return topics;
+    }
+
+    public String getJoinedTopics() {
+        StringJoiner joiner = new StringJoiner(",");
+        for (String tag : topics) {
+            joiner.add(tag);
+        }
+        return joiner.toString();
     }
 
     public void setTopics(String[] topics) {

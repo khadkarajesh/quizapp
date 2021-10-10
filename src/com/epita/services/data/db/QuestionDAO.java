@@ -65,8 +65,15 @@ public class QuestionDAO extends BaseDAO implements IDAO<Question> {
 
     @Override
     public ArrayList<Question> search(Question question) throws SQLException {
-        String sqlSearch = "select * from " + DatabaseManager.Table.QUESTION + " where " + DatabaseManager.QuestionColumns.TITLE + " like" + "'" + "%" + question.getQuestion() + "%" + "'";
-        return getQuestions(sqlSearch);
+        String sqlSearch = "select * from " + DatabaseManager.Table.QUESTION + " where " + DatabaseManager.QuestionColumns.QUIZ_ID + "=?";
+        PreparedStatement statement = manager.prepare(sqlSearch);
+        statement.setInt(1, question.getQuizId());
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Question> results = new ArrayList<>();
+        while (resultSet.next()) {
+            results.add(toModel(resultSet));
+        }
+        return results;
     }
 
     private ArrayList<Question> getQuestions(String sql) throws SQLException {
